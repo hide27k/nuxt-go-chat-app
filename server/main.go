@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"github/hideUW/nuxt_go_template/server/infra/router"
+	"github.com/hideUW/nuxt_go_template/server/infra/router"
 )
 
 func main() {
