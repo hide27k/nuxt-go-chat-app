@@ -1,0 +1,1 @@
+# nuxt_go_template
