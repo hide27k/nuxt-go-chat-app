@@ -18,7 +18,7 @@ func main() {
 	}
 }
 
-// ServeStaticFile is deliver static files
+// ServeStaticFile delivers static files
 func ServeStaticFile(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, entrypoint)
