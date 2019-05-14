@@ -1,6 +1,19 @@
 version: '3'
 
 services:
+  nvgdb:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: "nuxt_go_template"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - "./mysql:/etc/mysql/conf.d"
+      - "./mysql/data:/var/lib/mysql"
+      - "./mysql/init:/docker-entrypoint-initdb.d"
+    container_name: gvdb
+    ports:
+      - "3306:3306"
   app:
     build:
       context: ./
