@@ -1,5 +1,7 @@
 package model
 
+const InvalidID = 0
+
 // InvalidReasonForDeveloper is InvalidReason message for developer.
 type InvalidReasonForDeveloper string
 
@@ -43,7 +45,8 @@ func (p PropertyNameForDeveloper) String() string {
 
 // Property name for developer.
 const (
-	IDPropertyForDeveloper PropertyNameForDeveloper = "id"
+	IDPropertyForDeveloper   PropertyNameForDeveloper = "id"
+	NamePropertyForDeveloper PropertyNameForDeveloper = "name"
 )
 
 // PropertyNameForUser is Property name for user.
@@ -56,5 +59,6 @@ func (p PropertyNameForUser) String() string {
 
 // Property name for user.
 const (
-	IDPropertyForUser PropertyNameForUser = "ID"
+	IDPropertyForUser   PropertyNameForUser = "ID"
+	NamePropertyForUser PropertyNameForUser = "名前"
 )
