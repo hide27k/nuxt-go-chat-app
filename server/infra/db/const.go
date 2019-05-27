@@ -1,3 +1,3 @@
 package db
 
-const errMsg = "test"
+const errMsg = "Some errors have occurred"
