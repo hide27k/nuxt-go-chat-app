@@ -108,7 +108,7 @@ func (repo *sessionRepository) list(m repository.DBManager, method model.Reposit
 }
 
 // InsertSession insert a record.
-func (repo *sessionRepository) InsertSession(m repository.DBManager, session *model.Session) (err error) {
+func (repo *sessionRepository) InsertSession(m repository.DBManager, session *model.Session) error {
 	query := "INSERT INTO sessions (id, user_id, created_at, updated_at) VALUES (?, ?, ?, ?)"
 	stmt, err := m.PrepareContext(repo.ctx, query)
 	if err != nil {

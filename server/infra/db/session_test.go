@@ -183,7 +183,7 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 			}
 
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("sessionRepository.GetSessionByID() = %v, want %v", got, tt.want)
+				t.Errorf("sessionRepository.GetSessionByID() = %v, wantErr %v", got, tt.want)
 			}
 		})
 	}
