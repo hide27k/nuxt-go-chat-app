@@ -3,15 +3,15 @@ package main
 import (
 	"net/http"
 
-	"github.com/hideUW/nuxt_go_template/server/infra/router"
+	"github.com/hideUW/nuxt-go-chat-app/server/infra/router"
 )
 
 func main() {
 	// For static file
-	entrypoint := "../client/nuxt_go_template/dist/index.html"
+	entrypoint := "../client/nuxt-go-chat-app/dist/index.html"
 	router.Router.Path("/").HandlerFunc(ServeStaticFile(entrypoint))
 	router.Router.PathPrefix("/_nuxt/").Handler(
-		http.StripPrefix("/_nuxt/", http.FileServer(http.Dir("../client/nuxt_go_template/dist/_nuxt/"))))
+		http.StripPrefix("/_nuxt/", http.FileServer(http.Dir("../client/nuxt-go-chat-app/dist/_nuxt/"))))
 
 	if err := http.ListenAndServe(":8080", router.Router); err != nil {
 		panic(err.Error())

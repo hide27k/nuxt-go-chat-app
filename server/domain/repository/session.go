@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/hideUW/nuxt_go_template/server/domain/model"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 )
 
 // SessionRepository is repository of session.

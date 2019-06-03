@@ -8,8 +8,8 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	model "github.com/hideUW/nuxt_go_template/server/domain/model"
-	repository "github.com/hideUW/nuxt_go_template/server/domain/repository"
+	model "github.com/hideUW/nuxt-go-chat-app/server/domain/model"
+	repository "github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
 )
 
 // MockUserRepository is a mock of UserRepository interface
