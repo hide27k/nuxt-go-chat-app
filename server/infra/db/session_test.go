@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hideUW/nuxt_go_template/server/domain/model"
-	"github.com/hideUW/nuxt_go_template/server/domain/repository"
-	"github.com/hideUW/nuxt_go_template/server/testutil"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
+	"github.com/hideUW/nuxt-go-chat-app/server/testutil"
 	"github.com/pkg/errors"
 	sqlmock "gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
@@ -70,10 +70,10 @@ func Test_sessionRepository_ErrorMsg(t *testing.T) {
 			},
 			args: args{
 				method: model.RepositoryMethodINSERT,
-				err:    errors.New(errMsg),
+				err:    errors.New(model.ErrorMessageForTest),
 			},
 			wantErr: &model.RepositoryError{
-				BaseErr:                     errors.New(errMsg),
+				BaseErr:                     errors.New(model.ErrorMessageForTest),
 				RepositoryMethod:            model.RepositoryMethodINSERT,
 				DomainModelNameForDeveloper: model.DomainModelNameSessionForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameSessionForUser,
@@ -128,11 +128,11 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 			},
 			args: args{
 				m:  db,
-				id: sessionValidIDForTest,
+				id: model.SessionValidIDForTest,
 			},
 			want: &model.Session{
-				ID:        sessionValidIDForTest,
-				UserID:    userValidIDForTest,
+				ID:        model.SessionValidIDForTest,
+				UserID:    model.UserValidIDForTest,
 				CreatedAt: testutil.TimeNow(),
 				UpdatedAt: testutil.TimeNow(),
 			},
@@ -145,13 +145,13 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 			},
 			args: args{
 				m:  db,
-				id: sessionInValidIDForTest,
+				id: model.SessionInValidIDForTest,
 			},
 			want: nil,
 			wantErr: &model.NoSuchDataError{
 				PropertyNameForDeveloper:    model.IDPropertyForDeveloper,
 				PropertyNameForUser:         model.IDPropertyForUser,
-				PropertyValue:               sessionInValidIDForTest,
+				PropertyValue:               model.SessionInValidIDForTest,
 				DomainModelNameForDeveloper: model.DomainModelNameSessionForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameSessionForUser,
 			},
@@ -225,8 +225,8 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 			args: args{
 				m: db,
 				session: &model.Session{
-					ID:        sessionValidIDForTest,
-					UserID:    userValidIDForTest,
+					ID:        model.SessionValidIDForTest,
+					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -242,8 +242,8 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 			args: args{
 				m: db,
 				session: &model.Session{
-					ID:        sessionInValidIDForTest,
-					UserID:    userValidIDForTest,
+					ID:        model.SessionInValidIDForTest,
+					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -263,8 +263,8 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 			args: args{
 				m: db,
 				session: &model.Session{
-					ID:        sessionInValidIDForTest,
-					UserID:    userValidIDForTest,
+					ID:        model.SessionInValidIDForTest,
+					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -284,12 +284,12 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 			args: args{
 				m: db,
 				session: &model.Session{
-					ID:        sessionInValidIDForTest,
-					UserID:    userValidIDForTest,
+					ID:        model.SessionInValidIDForTest,
+					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
-				err: errors.New(errMsg),
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
@@ -357,7 +357,7 @@ func Test_sessionRepository_DeleteSession(t *testing.T) {
 			rowAffected: 1,
 			args: args{
 				m:  db,
-				id: userValidIDForTest,
+				id: model.UserValidIDForTest,
 			},
 			wantErr: nil,
 		},
@@ -369,7 +369,7 @@ func Test_sessionRepository_DeleteSession(t *testing.T) {
 			rowAffected: 0,
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 			},
 			wantErr: &model.RepositoryError{
 				RepositoryMethod:            model.RepositoryMethodDELETE,
@@ -385,7 +385,7 @@ func Test_sessionRepository_DeleteSession(t *testing.T) {
 			rowAffected: 2,
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 			},
 			wantErr: &model.RepositoryError{
 				RepositoryMethod:            model.RepositoryMethodDELETE,
@@ -401,8 +401,8 @@ func Test_sessionRepository_DeleteSession(t *testing.T) {
 			rowAffected: 0,
 			args: args{
 				m:   db,
-				id:  userInValidIDForTest,
-				err: errors.New(errMsg),
+				id:  model.UserInValidIDForTest,
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			wantErr: &model.RepositoryError{
 				RepositoryMethod:            model.RepositoryMethodDELETE,

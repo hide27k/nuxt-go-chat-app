@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/hideUW/nuxt_go_template/server/domain/model"
-	"github.com/hideUW/nuxt_go_template/server/domain/repository"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
 
 	// SQL Driver
 	_ "github.com/go-sql-driver/mysql"
@@ -18,7 +18,7 @@ type sqlManager struct {
 
 // NewSQLManager generates and returns SQLManager.
 func NewSQLManager() repository.SQLManager {
-	conn, err := sql.Open("mysql", "root@tcp(nvgdb:3306)/nuxt_go_template?charset=utf8mb4&parseTime=True")
+	conn, err := sql.Open("mysql", "root@tcp(nvgdb:3306)/nuxt-go-chat-app?charset=utf8mb4&parseTime=True")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -29,7 +29,7 @@ func NewSQLManager() repository.SQLManager {
 }
 
 // Exec executes SQL.
-func (s *sqlManager) Exec(query string, args ...interface{}) (sql.Result, error) {
+func (s sqlManager) Exec(query string, args ...interface{}) (sql.Result, error) {
 	return s.Conn.Exec(query, args...)
 }
 
