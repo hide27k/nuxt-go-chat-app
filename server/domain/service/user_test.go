@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
+	mock_repository "github.com/hideUW/nuxt-go-chat-app/server/domain/repository/mock"
 	"github.com/hideUW/nuxt-go-chat-app/server/infra/db"
-	mock_repository "github.com/hideUW/nuxt-go-chat-app/server/infra/db/mock"
 	"github.com/hideUW/nuxt-go-chat-app/server/testutil"
 	"github.com/pkg/errors"
 
