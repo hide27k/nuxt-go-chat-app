@@ -6,7 +6,6 @@ import (
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/service"
-	"github.com/hideUW/nuxt-go-chat-app/server/util"
 	"github.com/pkg/errors"
 )
 
@@ -30,9 +29,9 @@ func NewSessionService(m repository.SQLManager, f service.SessionRepoFactory, tx
 	}
 }
 
-func createSession(ctx context.Context, userID uint32, db repository.DBManager, repo repository.SessionRepository, sService service.SessionService) (*model.Session, error) {
+func createSession(ctx context.Context, sessionID string, userID uint32, db repository.DBManager, repo repository.SessionRepository, sService service.SessionService) (*model.Session, error) {
 	session := model.NewSession(userID)
-	sessionID := util.UUID()
+	session.ID = sessionID
 
 	yes := true
 	var err error
