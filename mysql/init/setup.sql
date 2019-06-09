@@ -1,4 +1,4 @@
-USE  nuxt_go_template;
+USE  nuxt-go-chat-app;
 
 /*
 Create users table. It has 'id' which has a unique identity, 

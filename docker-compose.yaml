@@ -5,7 +5,7 @@ services:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_DATABASE: "nuxt_go_template"
+      MYSQL_DATABASE: "nuxt-go-chat-app"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - "./mysql:/etc/mysql/conf.d"
@@ -19,8 +19,8 @@ services:
       context: ./
       dockerfile: docker/Dockerfile
     volumes:
-      - ./:/go/src/github.com/hideUW/nuxt_go_template
-    command: bash -c 'cd /go/src/github.com/hideUW/nuxt_go_template/server && go run *.go'
+      - ./:/go/src/github.com/hideUW/nuxt-go-chat-app
+    command: bash -c 'cd /go/src/github.com/hideUW/nuxt-go-chat-app/server && go run *.go'
     ports:
       - "8080:8080"
     container_name: app

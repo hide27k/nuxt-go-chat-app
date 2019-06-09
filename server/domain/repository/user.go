@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/hideUW/nuxt_go_template/server/domain/model"
+import "github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 
 // UserRepository is repository of user.
 type UserRepository interface {

@@ -7,12 +7,49 @@ type RepositoryMethod string
 
 // Method of Repository
 const (
-	RepositoryMethodREAD   = "READ"
-	RepositoryMethodINSERT = "INSERT"
-	RepositoryMethodUPDATE = "UPDATE"
-	RepositoryMethodDELETE = "DELETE"
-	RepositoryMethodLIST   = "LIST"
+	RepositoryMethodREAD   RepositoryMethod = "READ"
+	RepositoryMethodINSERT RepositoryMethod = "INSERT"
+	RepositoryMethodUPDATE RepositoryMethod = "UPDATE"
+	RepositoryMethodDELETE RepositoryMethod = "DELETE"
+	RepositoryMethodLIST   RepositoryMethod = "LIST"
 )
+
+// AlreadyExistError expresses already specified data has existed.
+type AlreadyExistError struct {
+	BaseErr error
+	PropertyNameForDeveloper
+	PropertyNameForUser
+	PropertyValue interface{}
+	DomainModelNameForDeveloper
+	DomainModelNameForUser
+}
+
+// Error returns error message.
+func (e *AlreadyExistError) Error() string {
+	return fmt.Sprintf("%s, %s, is already exists", e.PropertyNameForDeveloper, e.DomainModelNameForDeveloper)
+}
+
+// RequiredError is not existing necessary value error.
+type RequiredError struct {
+	BaseErr error
+	PropertyNameForDeveloper
+	PropertyNameForUser
+}
+
+// Error returns error message.
+func (e *RequiredError) Error() string {
+	return fmt.Sprintf("%s is required", e.PropertyNameForDeveloper)
+}
+
+// InvalidParamError is inappropriate parameter error.
+type InvalidParamError struct {
+	BaseErr error
+	PropertyNameForDeveloper
+	PropertyNameForUser
+	PropertyValue interface{}
+	InvalidReasonForDeveloper
+	InvalidReasonForUser string
+}
 
 // NoSuchDataError represents that spesific data doesn't exist.
 type NoSuchDataError struct {
@@ -51,4 +88,14 @@ type SQLError struct {
 // Error returns error message.
 func (e *SQLError) Error() string {
 	return e.InvalidReasonForDeveloper.String()
+}
+
+// AuthenticationErr is Authentication error.
+type AuthenticationErr struct {
+	BaseErr error
+}
+
+// Error returns error message.
+func (e *AuthenticationErr) Error() string {
+	return "invalid name or password"
 }

@@ -6,16 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hideUW/nuxt_go_template/server/domain/model"
-	"github.com/hideUW/nuxt_go_template/server/domain/repository"
-	"github.com/hideUW/nuxt_go_template/server/testutil"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
+	"github.com/hideUW/nuxt-go-chat-app/server/testutil"
 	"github.com/pkg/errors"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
 const (
 	userNameForTest             = "testUserName"
-	sessionIDForTest            = "testsessionID12345678"
 	passwordForTest             = "testPasswor"
 	userValidIDForTest   uint32 = 1
 	userInValidIDForTest uint32 = 2
@@ -51,7 +50,6 @@ func TestNewUserRepository(t *testing.T) {
 }
 
 func Test_userRepository_ErrorMsg(t *testing.T) {
-	const errMsg = "test"
 
 	type fields struct {
 		ctx context.Context
@@ -74,10 +72,10 @@ func Test_userRepository_ErrorMsg(t *testing.T) {
 			},
 			args: args{
 				method: model.RepositoryMethodINSERT,
-				err:    errors.New(errMsg),
+				err:    errors.New(model.ErrorMessageForTest),
 			},
 			wantErr: &model.RepositoryError{
-				BaseErr:                     errors.New(errMsg),
+				BaseErr:                     errors.New(model.ErrorMessageForTest),
 				RepositoryMethod:            model.RepositoryMethodINSERT,
 				DomainModelNameForDeveloper: model.DomainModelNameUserForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameUserForUser,
@@ -137,10 +135,10 @@ func Test_userRepository_GetUserByID(t *testing.T) {
 				id: userValidIDForTest,
 			},
 			want: &model.User{
-				ID:        userValidIDForTest,
-				Name:      userNameForTest,
-				SessionID: sessionIDForTest,
-				Password:  passwordForTest,
+				ID:        model.UserValidIDForTest,
+				Name:      model.UserNameForTest,
+				SessionID: model.SessionValidIDForTest,
+				Password:  model.PasswordForTest,
 				CreatedAt: testutil.TimeNow(),
 				UpdatedAt: testutil.TimeNow(),
 			},
@@ -159,7 +157,7 @@ func Test_userRepository_GetUserByID(t *testing.T) {
 			wantErr: &model.NoSuchDataError{
 				PropertyNameForDeveloper:    model.IDPropertyForDeveloper,
 				PropertyNameForUser:         model.IDPropertyForUser,
-				PropertyValue:               userInValidIDForTest,
+				PropertyValue:               model.UserInValidIDForTest,
 				DomainModelNameForDeveloper: model.DomainModelNameUserForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameUserForUser,
 			},
@@ -233,9 +231,9 @@ func Test_userRepository_GetUserByName(t *testing.T) {
 				name: userNameForTest,
 			},
 			want: &model.User{
-				Name:      userNameForTest,
-				SessionID: sessionIDForTest,
-				Password:  passwordForTest,
+				Name:      model.UserNameForTest,
+				SessionID: model.SessionValidIDForTest,
+				Password:  model.PasswordForTest,
 				CreatedAt: testutil.TimeNow(),
 				UpdatedAt: testutil.TimeNow(),
 			},
@@ -307,6 +305,7 @@ func Test_userRepository_InsertUser(t *testing.T) {
 	type args struct {
 		m    repository.DBManager
 		user *model.User
+		err  error
 	}
 	tests := []struct {
 		name        string
@@ -323,10 +322,10 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			args: args{
 				m: db,
 				user: &model.User{
-					ID:        userValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -342,10 +341,10 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			args: args{
 				m: db,
 				user: &model.User{
-					ID:        userInValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserInValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -367,7 +366,7 @@ func Test_userRepository_InsertUser(t *testing.T) {
 				user: &model.User{
 					ID:        userInValidIDForTest,
 					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
+					SessionID: sessionValidIDForTest,
 					Password:  passwordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
@@ -388,13 +387,14 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			args: args{
 				m: db,
 				user: &model.User{
-					ID:        userInValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserInValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
@@ -409,8 +409,8 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			query := "INSERT INTO users"
 			prep := mock.ExpectPrepare(query)
 
-			if tt.rowAffected != 1 {
-				prep.ExpectExec().WithArgs(tt.args.user.ID, tt.args.user.Name, tt.args.user.SessionID, tt.args.user.Password, tt.args.user.CreatedAt, tt.args.user.UpdatedAt).WillReturnError(errors.New(tt.wantErr.Error()))
+			if tt.args.err != nil {
+				prep.ExpectExec().WithArgs(tt.args.user.ID, tt.args.user.Name, tt.args.user.SessionID, tt.args.user.Password, tt.args.user.CreatedAt, tt.args.user.UpdatedAt).WillReturnError(tt.args.err)
 			} else {
 				prep.ExpectExec().WithArgs(tt.args.user.ID, tt.args.user.Name, tt.args.user.SessionID, tt.args.user.Password, tt.args.user.CreatedAt, tt.args.user.UpdatedAt).WillReturnResult(sqlmock.NewResult(1, tt.rowAffected))
 			}
@@ -435,7 +435,7 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 	// Set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
-		t.Fatal()
+		t.Fatal(err)
 	}
 	testutil.SetFakeTime(time.Now())
 
@@ -447,6 +447,7 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 		m    repository.DBManager
 		id   uint32
 		user *model.User
+		err  error
 	}
 
 	tests := []struct {
@@ -463,15 +464,16 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 			},
 			args: args{
 				m:  db,
-				id: userValidIDForTest,
+				id: model.UserValidIDForTest,
 				user: &model.User{
-					ID:        userValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 1,
 			wantErr:     nil,
@@ -483,15 +485,16 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 			},
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 				user: &model.User{
-					ID:        userInValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserInValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
@@ -507,12 +510,12 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 			},
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 				user: &model.User{
-					ID:        userInValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserInValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -531,12 +534,12 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 			},
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 				user: &model.User{
-					ID:        userInValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserInValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
@@ -554,8 +557,8 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 			query := "UPDATE users SET session_id=\\?, password=\\?, created_at=\\?, updated_at=\\? WHERE id=\\?"
 			prep := mock.ExpectPrepare(query)
 
-			if tt.rowAffected != 1 {
-				prep.ExpectExec().WithArgs(tt.args.user.SessionID, tt.args.user.Password, tt.args.user.CreatedAt, tt.args.user.UpdatedAt, tt.args.id).WillReturnError(errors.New(tt.wantErr.Error()))
+			if tt.args.err != nil {
+				prep.ExpectExec().WithArgs(tt.args.user.SessionID, tt.args.user.Password, tt.args.user.CreatedAt, tt.args.user.UpdatedAt, tt.args.id).WillReturnError(tt.args.err)
 			} else {
 				prep.ExpectExec().WithArgs(tt.args.user.SessionID, tt.args.user.Password, tt.args.user.CreatedAt, tt.args.user.UpdatedAt, tt.args.id).WillReturnResult(sqlmock.NewResult(1, tt.rowAffected))
 			}
@@ -587,8 +590,9 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 	}
 
 	type args struct {
-		m  repository.DBManager
-		id uint32
+		m   repository.DBManager
+		id  uint32
+		err error
 	}
 
 	tests := []struct {
@@ -606,7 +610,7 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 			rowAffected: 1,
 			args: args{
 				m:  db,
-				id: userValidIDForTest,
+				id: model.UserValidIDForTest,
 			},
 			wantErr: nil,
 		},
@@ -618,7 +622,7 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 			rowAffected: 0,
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 			},
 			wantErr: &model.RepositoryError{
 				RepositoryMethod:            model.RepositoryMethodDELETE,
@@ -634,7 +638,7 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 			rowAffected: 2,
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 			},
 			wantErr: &model.RepositoryError{
 				RepositoryMethod:            model.RepositoryMethodDELETE,
@@ -649,8 +653,9 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 			},
 			rowAffected: 0,
 			args: args{
-				m:  db,
-				id: userInValidIDForTest,
+				m:   db,
+				id:  model.UserInValidIDForTest,
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			wantErr: &model.RepositoryError{
 				RepositoryMethod:            model.RepositoryMethodDELETE,
@@ -664,8 +669,8 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 			query := "DELETE FROM users WHERE id=\\?"
 			prep := mock.ExpectPrepare(query)
 
-			if tt.rowAffected != 1 {
-				prep.ExpectExec().WithArgs(tt.args.id).WillReturnError(errors.New(tt.wantErr.Error()))
+			if tt.args.err != nil {
+				prep.ExpectExec().WithArgs(tt.args.id).WillReturnError(tt.args.err)
 			} else {
 				prep.ExpectExec().WithArgs(tt.args.id).WillReturnResult(sqlmock.NewResult(1, tt.rowAffected))
 			}

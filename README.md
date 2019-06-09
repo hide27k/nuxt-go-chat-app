@@ -1,4 +1,4 @@
-# nuxt_go_template
+# nuxt-go-chat-app
 
 Web Application with Nuxt & Go
 
