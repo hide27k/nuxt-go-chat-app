@@ -7,9 +7,8 @@ import (
 
 // HashPassword generates hased password.
 func HashPassword(password string) (string, error) {
-	cost := 14
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), cost)
-	return string(bytes), errors.Wrap(err, "failed to generate from password")
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(hash), errors.Wrap(err, "failed to generate from password")
 }
 
 // CheckHashOfPassword checks if given hash will be the same value of hashed password.

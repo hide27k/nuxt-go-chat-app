@@ -72,7 +72,7 @@ const (
 // User
 const (
 	UserNameForTest             = "testUserName"
-	PasswordForTest             = "testPasswor"
+	PasswordForTest             = "testPassword"
 	UserValidIDForTest   uint32 = 1
 	UserInValidIDForTest uint32 = 2
 )

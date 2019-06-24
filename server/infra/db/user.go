@@ -32,7 +32,7 @@ func (repo *userRepository) ErrorMsg(method model.RepositoryMethod, err error) e
 	}
 }
 
-func (repo *userRepository) GetUserByID(m DBManager, id uint32) (*model.User, error) {
+func (repo *userRepository) GetUserByID(m SQLManager, id uint32) (*model.User, error) {
 	query := "SELECT id, name, session_id, password, created_at, updated_at FROM users WHERE id=?"
 
 	list, err := repo.list(m, model.RepositoryMethodREAD, query, id)
@@ -56,7 +56,7 @@ func (repo *userRepository) GetUserByID(m DBManager, id uint32) (*model.User, er
 	return list[0], nil
 }
 
-func (repo *userRepository) GetUserByName(m DBManager, name string) (*model.User, error) {
+func (repo *userRepository) GetUserByName(m SQLManager, name string) (*model.User, error) {
 	query := "SELECT id, name, session_id, password, created_at, updated_at FROM users WHERE name=?"
 	list, err := repo.list(m, model.RepositoryMethodREAD, query, name)
 
@@ -80,7 +80,7 @@ func (repo *userRepository) GetUserByName(m DBManager, name string) (*model.User
 
 }
 
-func (repo *userRepository) list(m DBManager, method model.RepositoryMethod, query string, args ...interface{}) (users []*model.User, err error) {
+func (repo *userRepository) list(m SQLManager, method model.RepositoryMethod, query string, args ...interface{}) (users []*model.User, err error) {
 	stmt, err := m.PrepareContext(repo.ctx, query)
 	if err != nil {
 		return nil, repo.ErrorMsg(method, errors.WithStack(err))
@@ -126,7 +126,7 @@ func (repo *userRepository) list(m DBManager, method model.RepositoryMethod, que
 	return list, nil
 }
 
-func (repo *userRepository) InsertUser(m DBManager, user *model.User) (uint32, error) {
+func (repo *userRepository) InsertUser(m SQLManager, user *model.User) (uint32, error) {
 	query := "INSERT INFO users (name, session_id, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
 	stmt, err := m.PrepareContext(repo.ctx, query)
 	if err != nil {
@@ -157,7 +157,7 @@ func (repo *userRepository) InsertUser(m DBManager, user *model.User) (uint32, e
 
 	return uint32(id), nil
 }
-func (repo *userRepository) UpdateUser(m DBManager, id uint32, user *model.User) error {
+func (repo *userRepository) UpdateUser(m SQLManager, id uint32, user *model.User) error {
 	query := "UPDATE users SET session_id=?, password=?, update_at=?, WHERE id=?"
 
 	stmt, err := m.PrepareContext(repo.ctx, query)
@@ -185,7 +185,7 @@ func (repo *userRepository) UpdateUser(m DBManager, id uint32, user *model.User)
 
 	return nil
 }
-func (repo *userRepository) DeleteUser(m DBManager, id uint32) error {
+func (repo *userRepository) DeleteUser(m SQLManager, id uint32) error {
 	query := "DELETE FROM users WHERE id=?"
 
 	stmt, err := m.PrepareContext(repo.ctx, query)
