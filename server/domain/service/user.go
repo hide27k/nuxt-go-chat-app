@@ -17,15 +17,15 @@ type UserService interface {
 type UserRepoFactory func(ctx context.Context) repository.UserRepository
 
 type userService struct {
+	m    repository.DBManager
 	repo repository.UserRepository
-	m    repository.SQLManager
 }
 
 // NewUserService returns UserService.
-func NewUserService(repo repository.UserRepository, m repository.SQLManager) UserService {
+func NewUserService(m repository.DBManager, repo repository.UserRepository) UserService {
 	return &userService{
-		repo: repo,
 		m:    m,
+		repo: repo,
 	}
 }
 

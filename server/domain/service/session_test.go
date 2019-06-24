@@ -22,7 +22,7 @@ func Test_sessionService_IsAlreadyExistID(t *testing.T) {
 
 	type fields struct {
 		repo repository.SessionRepository
-		m    repository.SQLManager
+		m    repository.DBManager
 	}
 
 	type args struct {
@@ -47,7 +47,7 @@ func Test_sessionService_IsAlreadyExistID(t *testing.T) {
 			name: "When the specific session already exists, return true and nil.",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -69,7 +69,7 @@ func Test_sessionService_IsAlreadyExistID(t *testing.T) {
 			name: "When the specific session doesn't exit, return false and nil.",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -86,7 +86,7 @@ func Test_sessionService_IsAlreadyExistID(t *testing.T) {
 			name: "When some errors have ocurred, return false and error",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx: context.Background(),

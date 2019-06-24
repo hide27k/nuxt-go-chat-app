@@ -23,7 +23,7 @@ func Test_userService_IsAlreadyExistID(t *testing.T) {
 
 	type fields struct {
 		repo repository.UserRepository
-		m    repository.SQLManager
+		m    repository.DBManager
 	}
 	type args struct {
 		ctx context.Context
@@ -47,7 +47,7 @@ func Test_userService_IsAlreadyExistID(t *testing.T) {
 			name: "When specified user already exists, return true and nil.",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -71,7 +71,7 @@ func Test_userService_IsAlreadyExistID(t *testing.T) {
 			name: "When specified user doesn't already exists, return true and nil.",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -88,7 +88,7 @@ func Test_userService_IsAlreadyExistID(t *testing.T) {
 			name: "When some error has occurred, return false and error.",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -134,7 +134,7 @@ func Test_userService_IsAlreadyExistName(t *testing.T) {
 
 	type fields struct {
 		repo repository.UserRepository
-		m    repository.SQLManager
+		m    repository.DBManager
 	}
 
 	type args struct {
@@ -159,7 +159,7 @@ func Test_userService_IsAlreadyExistName(t *testing.T) {
 			name: "",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx:  context.Background(),
@@ -183,7 +183,7 @@ func Test_userService_IsAlreadyExistName(t *testing.T) {
 			name: "",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx:  context.Background(),
@@ -200,7 +200,7 @@ func Test_userService_IsAlreadyExistName(t *testing.T) {
 			name: "",
 			fields: fields{
 				repo: mock,
-				m:    db.NewSQLManager(),
+				m:    db.NewDBManager(),
 			},
 			args: args{
 				ctx:  context.Background(),

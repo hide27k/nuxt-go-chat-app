@@ -7,21 +7,21 @@ import (
 
 // This file defines interfaces.
 
-// SQLManager manages SQL.
-type SQLManager interface {
-	DBManager
+// DBManager manages SQL.
+type DBManager interface {
+	SQLManager
 	Beginner
 }
 
 // TxManager manages Tx.
 type TxManager interface {
-	DBManager
+	SQLManager
 	Commit() error
 	Rollback() error
 }
 
-// DBManager manages DB.
-type DBManager interface {
+// SQLManager manages DB.
+type SQLManager interface {
 	Querier
 	Preparer
 	Executor
