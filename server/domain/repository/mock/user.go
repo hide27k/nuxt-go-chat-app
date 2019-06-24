@@ -36,7 +36,7 @@ func (m *MockUserRepository) EXPECT() *MockUserRepositoryMockRecorder {
 }
 
 // GetUserByID mocks base method
-func (m_2 *MockUserRepository) GetUserByID(m repository.DBManager, id uint32) (*model.User, error) {
+func (m_2 *MockUserRepository) GetUserByID(m repository.SQLManager, id uint32) (*model.User, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "GetUserByID", m, id)
 	ret0, _ := ret[0].(*model.User)
@@ -51,7 +51,7 @@ func (mr *MockUserRepositoryMockRecorder) GetUserByID(m, id interface{}) *gomock
 }
 
 // GetUserByName mocks base method
-func (m_2 *MockUserRepository) GetUserByName(m repository.DBManager, name string) (*model.User, error) {
+func (m_2 *MockUserRepository) GetUserByName(m repository.SQLManager, name string) (*model.User, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "GetUserByName", m, name)
 	ret0, _ := ret[0].(*model.User)
@@ -66,7 +66,7 @@ func (mr *MockUserRepositoryMockRecorder) GetUserByName(m, name interface{}) *go
 }
 
 // InsertUser mocks base method
-func (m_2 *MockUserRepository) InsertUser(m repository.DBManager, user *model.User) (uint32, error) {
+func (m_2 *MockUserRepository) InsertUser(m repository.SQLManager, user *model.User) (uint32, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "InsertUser", m, user)
 	ret0, _ := ret[0].(uint32)
@@ -81,7 +81,7 @@ func (mr *MockUserRepositoryMockRecorder) InsertUser(m, user interface{}) *gomoc
 }
 
 // UpdateUser mocks base method
-func (m_2 *MockUserRepository) UpdateUser(m repository.DBManager, id uint32, user *model.User) error {
+func (m_2 *MockUserRepository) UpdateUser(m repository.SQLManager, id uint32, user *model.User) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "UpdateUser", m, id, user)
 	ret0, _ := ret[0].(error)
@@ -95,7 +95,7 @@ func (mr *MockUserRepositoryMockRecorder) UpdateUser(m, id, user interface{}) *g
 }
 
 // DeleteUser mocks base method
-func (m_2 *MockUserRepository) DeleteUser(m repository.DBManager, id uint32) error {
+func (m_2 *MockUserRepository) DeleteUser(m repository.SQLManager, id uint32) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "DeleteUser", m, id)
 	ret0, _ := ret[0].(error)

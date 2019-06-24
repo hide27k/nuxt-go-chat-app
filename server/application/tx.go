@@ -6,9 +6,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-// CloseTransaction work after finishing tx.
+// CloseTransaction executes after process of tx.
 type CloseTransaction func(tx repository.TxManager, err error) error
 
+// beginTxErrorMsg generates and returns tx begin error message.
 func beginTxErrorMsg(err error) error {
 	return errors.WithStack(&model.SQLError{
 		BaseErr:                   err,

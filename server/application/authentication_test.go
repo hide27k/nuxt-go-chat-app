@@ -10,7 +10,9 @@ import (
 
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
+	mock_repository "github.com/hideUW/nuxt-go-chat-app/server/domain/repository/mock"
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/service"
+	mock_service "github.com/hideUW/nuxt-go-chat-app/server/domain/service/mock"
 	"github.com/hideUW/nuxt-go-chat-app/server/testutil"
 )
 
