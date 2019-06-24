@@ -10,7 +10,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	repository "github.com/sekky0905/nuxt-vue-go-chat/server/domain/repository"
+	repository "github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
 )
 
 // MockDBManager is a mock of DBManager interface

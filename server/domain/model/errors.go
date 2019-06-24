@@ -46,9 +46,9 @@ type InvalidParamError struct {
 	BaseErr error
 	PropertyNameForDeveloper
 	PropertyNameForUser
-	PropertyValue interface{}
-	InvalidReasonForDeveloper
-	InvalidReasonForUser string
+	PropertyValue             interface{}
+	InvalidReasonForDeveloper string
+	InvalidReasonForUser      string
 }
 
 // NoSuchDataError represents that spesific data doesn't exist.
