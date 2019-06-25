@@ -51,6 +51,11 @@ type InvalidParamError struct {
 	InvalidReasonForUser      string
 }
 
+// Error returns error message.
+func (e *InvalidParamError) Error() string {
+	return fmt.Sprintf("%s, %v, is invalid, %s", e.PropertyNameForDeveloper, e.PropertyValue, e.InvalidReasonForDeveloper)
+}
+
 // NoSuchDataError represents that spesific data doesn't exist.
 type NoSuchDataError struct {
 	BaseErr error
