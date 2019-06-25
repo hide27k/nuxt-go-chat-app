@@ -6,6 +6,7 @@ import (
 )
 
 // HashPassword generates hased password.
+// Returns string and error.
 func HashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(hash), errors.Wrap(err, "failed to generate from password")
