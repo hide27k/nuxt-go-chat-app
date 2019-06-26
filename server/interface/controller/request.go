@@ -9,9 +9,11 @@ import (
 	"github.com/pkg/errors"
 )
 
+const ContentLength = "Content-Length"
+
 // GetValueFromPayLoad load http payload.
 func GetValueFromPayLoad(r *http.Request) ([]byte, error) {
-	const ContentLength = "Content-Length"
+
 	cl := r.Header.Get(ContentLength)
 	length, err := strconv.Atoi(cl)
 	if err != nil {
