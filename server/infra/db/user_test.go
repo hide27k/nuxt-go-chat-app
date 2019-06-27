@@ -13,13 +13,6 @@ import (
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
-const (
-	userNameForTest             = "testUserName"
-	passwordForTest             = "testPasswor"
-	userValidIDForTest   uint32 = 1
-	userInValidIDForTest uint32 = 2
-)
-
 func TestNewUserRepository(t *testing.T) {
 	type args struct {
 		ctx context.Context
@@ -31,7 +24,7 @@ func TestNewUserRepository(t *testing.T) {
 		want repository.UserRepository
 	}{
 		{
-			name: "When it is given appropriate args, return UserRepository.",
+			name: "When given appropriate args, returns UserRepository",
 			args: args{
 				ctx: context.Background(),
 			},
@@ -50,7 +43,6 @@ func TestNewUserRepository(t *testing.T) {
 }
 
 func Test_userRepository_ErrorMsg(t *testing.T) {
-
 	type fields struct {
 		ctx context.Context
 	}
@@ -66,17 +58,17 @@ func Test_userRepository_ErrorMsg(t *testing.T) {
 		wantErr *model.RepositoryError
 	}{
 		{
-			name: "When it is given the appropriate args, returns appropriate error.",
+			name: "When given appropriate args, returns appropriate error",
 			fields: fields{
 				ctx: context.Background(),
 			},
 			args: args{
-				method: model.RepositoryMethodINSERT,
+				method: model.RepositoryMethodInsert,
 				err:    errors.New(model.ErrorMessageForTest),
 			},
 			wantErr: &model.RepositoryError{
 				BaseErr:                     errors.New(model.ErrorMessageForTest),
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameUserForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameUserForUser,
 			},
@@ -96,23 +88,20 @@ func Test_userRepository_ErrorMsg(t *testing.T) {
 }
 
 func Test_userRepository_GetUserByID(t *testing.T) {
-	// Set sql mock
+	// set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	// If db has error, close db.
 	defer db.Close()
 
-	// Set fake time.
 	testutil.SetFakeTime(time.Now())
 
 	type fields struct {
 		ctx context.Context
 	}
-
 	type args struct {
 		m  repository.SQLManager
 		id uint32
@@ -126,13 +115,13 @@ func Test_userRepository_GetUserByID(t *testing.T) {
 		wantErr *model.NoSuchDataError
 	}{
 		{
-			name: "When the specific user exists, return the user.",
+			name: "When a user specified by id exists, returns a user",
 			fields: fields{
 				ctx: context.Background(),
 			},
 			args: args{
 				m:  db,
-				id: userValidIDForTest,
+				id: model.UserValidIDForTest,
 			},
 			want: &model.User{
 				ID:        model.UserValidIDForTest,
@@ -145,13 +134,13 @@ func Test_userRepository_GetUserByID(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "When the specific user does not exist, return NoSuchDataError",
+			name: "When a user specified by id does not exist, returns NoSuchDataError",
 			fields: fields{
 				ctx: context.Background(),
 			},
 			args: args{
 				m:  db,
-				id: userInValidIDForTest,
+				id: model.UserInValidIDForTest,
 			},
 			want: nil,
 			wantErr: &model.NoSuchDataError{
@@ -196,7 +185,7 @@ func Test_userRepository_GetUserByID(t *testing.T) {
 }
 
 func Test_userRepository_GetUserByName(t *testing.T) {
-	// Set sqlmock
+	// set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Error(err)
@@ -208,7 +197,6 @@ func Test_userRepository_GetUserByName(t *testing.T) {
 	type fields struct {
 		ctx context.Context
 	}
-
 	type args struct {
 		m    repository.SQLManager
 		name string
@@ -222,13 +210,13 @@ func Test_userRepository_GetUserByName(t *testing.T) {
 		wantErr *model.NoSuchDataError
 	}{
 		{
-			name: "Return a user if a user specified by name exists.",
+			name: "When a user specified by name exists, returns a user",
 			fields: fields{
 				ctx: context.Background(),
 			},
 			args: args{
 				m:    db,
-				name: userNameForTest,
+				name: model.UserNameForTest,
 			},
 			want: &model.User{
 				Name:      model.UserNameForTest,
@@ -240,7 +228,7 @@ func Test_userRepository_GetUserByName(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "Return NoSuchDataError if a user specified by name doesn't exists.",
+			name: "When a user specified by name does not exist, returns NoSuchDataError",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -249,6 +237,7 @@ func Test_userRepository_GetUserByName(t *testing.T) {
 				name: "test2",
 			},
 			want: nil,
+
 			wantErr: &model.NoSuchDataError{
 				PropertyNameForDeveloper:    model.NamePropertyForDeveloper,
 				PropertyNameForUser:         model.NamePropertyForUser,
@@ -289,7 +278,7 @@ func Test_userRepository_GetUserByName(t *testing.T) {
 }
 
 func Test_userRepository_InsertUser(t *testing.T) {
-	// Set sql mock
+	// set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatal(err)
@@ -307,6 +296,7 @@ func Test_userRepository_InsertUser(t *testing.T) {
 		user *model.User
 		err  error
 	}
+
 	tests := []struct {
 		name        string
 		fields      fields
@@ -315,7 +305,7 @@ func Test_userRepository_InsertUser(t *testing.T) {
 		wantErr     *model.RepositoryError
 	}{
 		{
-			name: "When a user which has sID, Name, Session_id, Password, CreatedAt, UpdatedAt is given, returns nil",
+			name: "When a user which has ID, Name, Session_ID, Password, CreatedAt, UpdatedAt is given, returns ID",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -351,7 +341,7 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameUserForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameUserForUser,
 			},
@@ -364,17 +354,17 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			args: args{
 				m: db,
 				user: &model.User{
-					ID:        userInValidIDForTest,
-					Name:      userNameForTest,
-					SessionID: sessionValidIDForTest,
-					Password:  passwordForTest,
+					ID:        model.UserInValidIDForTest,
+					Name:      model.UserNameForTest,
+					SessionID: model.SessionValidIDForTest,
+					Password:  model.PasswordForTest,
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
 			},
 			rowAffected: 2,
 			wantErr: &model.RepositoryError{
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameUserForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameUserForUser,
 			},
@@ -398,7 +388,7 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameUserForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameUserForUser,
 			},
@@ -428,11 +418,10 @@ func Test_userRepository_InsertUser(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func Test_userRepository_UpdateUser(t *testing.T) {
-	// Set sqlmock
+	// set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatal(err)
@@ -442,7 +431,6 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 	type fields struct {
 		ctx context.Context
 	}
-
 	type args struct {
 		m    repository.SQLManager
 		id   uint32
@@ -458,7 +446,7 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 		wantErr     *model.RepositoryError
 	}{
 		{
-			name: "When a user which has Name, Session_id, Password, UpdatedAt is given, returns nil",
+			name: "When a user which has Name, Session_ID, Password, UpdatedAt is given, returns nil",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -473,13 +461,12 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
-				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 1,
 			wantErr:     nil,
 		},
 		{
-			name: "When RowAffected is 0, returns error",
+			name: "when RowAffected is 0、returns error",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -494,7 +481,6 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
-				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
@@ -504,7 +490,7 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 			},
 		},
 		{
-			name: "When RowAffected is 2, returns error.",
+			name: "when RowAffected is 2、returns error",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -543,6 +529,7 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 					CreatedAt: testutil.TimeNow(),
 					UpdatedAt: testutil.TimeNow(),
 				},
+				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
@@ -578,7 +565,7 @@ func Test_userRepository_UpdateUser(t *testing.T) {
 }
 
 func Test_userRepository_DeleteUser(t *testing.T) {
-	// Set sqlmock
+	// set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatal(err)
@@ -588,7 +575,6 @@ func Test_userRepository_DeleteUser(t *testing.T) {
 	type fields struct {
 		ctx context.Context
 	}
-
 	type args struct {
 		m   repository.SQLManager
 		id  uint32

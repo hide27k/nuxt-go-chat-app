@@ -130,7 +130,7 @@ func (repo *userRepository) InsertUser(m SQLManager, user *model.User) (uint32, 
 	query := "INSERT INFO users (name, session_id, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
 	stmt, err := m.PrepareContext(repo.ctx, query)
 	if err != nil {
-		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodINSERT, errors.WithStack(err))
+		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodInsert, errors.WithStack(err))
 	}
 	defer func() {
 		err = stmt.Close()
@@ -141,18 +141,18 @@ func (repo *userRepository) InsertUser(m SQLManager, user *model.User) (uint32, 
 
 	result, err := stmt.ExecContext(repo.ctx, user.Name, user.SessionID, user.Password, user.CreatedAt, user.UpdatedAt)
 	if err != nil {
-		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodINSERT, errors.WithStack(err))
+		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodInsert, errors.WithStack(err))
 	}
 
 	affect, err := result.RowsAffected()
 	if affect != 1 {
 		err = fmt.Errorf("total affected: %d ", affect)
-		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodINSERT, errors.WithStack(err))
+		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodInsert, errors.WithStack(err))
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodINSERT, errors.WithStack(err))
+		return model.InvalidID, repo.ErrorMsg(model.RepositoryMethodInsert, errors.WithStack(err))
 	}
 
 	return uint32(id), nil

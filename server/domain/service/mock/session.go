@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	model "github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 )
 
 // MockSessionService is a mock of SessionService interface
@@ -34,19 +35,18 @@ func (m *MockSessionService) EXPECT() *MockSessionServiceMockRecorder {
 	return m.recorder
 }
 
-// IsAlreadyExistID mocks base method
-func (m *MockSessionService) IsAlreadyExistID(ctx context.Context, id string) (bool, error) {
+// NewSession mocks base method
+func (m *MockSessionService) NewSession(userID uint32) *model.Session {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IsAlreadyExistID", ctx, id)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret := m.ctrl.Call(m, "NewSession", userID)
+	ret0, _ := ret[0].(*model.Session)
+	return ret0
 }
 
-// IsAlreadyExistID indicates an expected call of IsAlreadyExistID
-func (mr *MockSessionServiceMockRecorder) IsAlreadyExistID(ctx, id interface{}) *gomock.Call {
+// NewSession indicates an expected call of NewSession
+func (mr *MockSessionServiceMockRecorder) NewSession(userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsAlreadyExistID", reflect.TypeOf((*MockSessionService)(nil).IsAlreadyExistID), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewSession", reflect.TypeOf((*MockSessionService)(nil).NewSession), userID)
 }
 
 // SessionID mocks base method
@@ -61,4 +61,19 @@ func (m *MockSessionService) SessionID() string {
 func (mr *MockSessionServiceMockRecorder) SessionID() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SessionID", reflect.TypeOf((*MockSessionService)(nil).SessionID))
+}
+
+// IsAlreadyExistID mocks base method
+func (m *MockSessionService) IsAlreadyExistID(ctx context.Context, id string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsAlreadyExistID", ctx, id)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsAlreadyExistID indicates an expected call of IsAlreadyExistID
+func (mr *MockSessionServiceMockRecorder) IsAlreadyExistID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsAlreadyExistID", reflect.TypeOf((*MockSessionService)(nil).IsAlreadyExistID), ctx, id)
 }
