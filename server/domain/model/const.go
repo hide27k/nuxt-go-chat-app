@@ -3,6 +3,9 @@ package model
 // InvalidID is for unit tests.
 const InvalidID = 0
 
+// SessionIDAtCookie is for test.
+const SessionIDAtCookie = "SESSION_ID"
+
 // InvalidReasonForDeveloper is InvalidReason message for developer.
 type InvalidReasonForDeveloper string
 

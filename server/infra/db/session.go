@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
-	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
 	"github.com/pkg/errors"
 
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,14 +16,14 @@ type sessionRepository struct {
 	ctx context.Context
 }
 
-// NewSessionRepository generates sessionRepository and returns it.
+// NewSessionRepository generates and returns sessionRepository.
 func NewSessionRepository(ctx context.Context) repository.SessionRepository {
 	return &sessionRepository{
 		ctx: ctx,
 	}
 }
 
-// ErrorMsg returns error message.
+// ErrorMsg generates and returns error message.
 func (repo *sessionRepository) ErrorMsg(method model.RepositoryMethod, err error) error {
 	ex := &model.RepositoryError{
 		BaseErr:                     err,
@@ -32,13 +32,12 @@ func (repo *sessionRepository) ErrorMsg(method model.RepositoryMethod, err error
 		DomainModelNameForUser:      model.DomainModelNameSessionForUser,
 	}
 
-	log.Errorf("EX--->%#v", ex)
 	return ex
 }
 
 // GetSessionByID gets and returns a record specified by id.
 func (repo *sessionRepository) GetSessionByID(m repository.SQLManager, id string) (*model.Session, error) {
-	query := "SELECT id, user_id, created_at, updated_at FROM sessions WHERE id=?"
+	query := "SELECT id, user_id, created_at FROM sessions WHERE id=?"
 
 	list, err := repo.list(m, model.RepositoryMethodREAD, query, id)
 
@@ -94,7 +93,6 @@ func (repo *sessionRepository) list(m repository.SQLManager, method model.Reposi
 			&session.ID,
 			&session.UserID,
 			&session.CreatedAt,
-			&session.UpdatedAt,
 		)
 
 		if err != nil {
@@ -109,10 +107,10 @@ func (repo *sessionRepository) list(m repository.SQLManager, method model.Reposi
 
 // InsertSession insert a record.
 func (repo *sessionRepository) InsertSession(m repository.SQLManager, session *model.Session) error {
-	query := "INSERT INTO sessions (id, user_id, created_at, updated_at) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO sessions (id, user_id, created_at) VALUES (?, ?, ?, ?)"
 	stmt, err := m.PrepareContext(repo.ctx, query)
 	if err != nil {
-		return errors.WithStack(repo.ErrorMsg(model.RepositoryMethodINSERT, err))
+		return errors.WithStack(repo.ErrorMsg(model.RepositoryMethodInsert, err))
 	}
 	defer func() {
 		err = stmt.Close()
@@ -121,16 +119,15 @@ func (repo *sessionRepository) InsertSession(m repository.SQLManager, session *m
 		}
 	}()
 
-	result, err := stmt.ExecContext(repo.ctx, session.ID, session.UserID, session.CreatedAt, session.UpdatedAt)
+	result, err := stmt.ExecContext(repo.ctx, session.ID, session.UserID, session.CreatedAt)
 	if err != nil {
-		log.Errorf("[]==%s", err.Error())
-		return errors.WithStack(repo.ErrorMsg(model.RepositoryMethodINSERT, err))
+		return errors.WithStack(repo.ErrorMsg(model.RepositoryMethodInsert, err))
 	}
 
 	affect, err := result.RowsAffected()
 	if affect != 1 {
 		err = fmt.Errorf("total affected: %d ", affect)
-		return errors.WithStack(repo.ErrorMsg(model.RepositoryMethodINSERT, err))
+		return errors.WithStack(repo.ErrorMsg(model.RepositoryMethodInsert, err))
 	}
 
 	return nil

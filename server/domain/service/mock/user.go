@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	model "github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 )
 
 // MockUserService is a mock of UserService interface
@@ -32,6 +33,21 @@ func NewMockUserService(ctrl *gomock.Controller) *MockUserService {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 	return m.recorder
+}
+
+// NewUser mocks base method
+func (m *MockUserService) NewUser(name, password string) (*model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "NewUser", name, password)
+	ret0, _ := ret[0].(*model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// NewUser indicates an expected call of NewUser
+func (mr *MockUserServiceMockRecorder) NewUser(name, password interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewUser", reflect.TypeOf((*MockUserService)(nil).NewUser), name, password)
 }
 
 // IsAlreadyExistID mocks base method

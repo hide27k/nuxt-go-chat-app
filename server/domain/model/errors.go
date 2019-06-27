@@ -8,7 +8,7 @@ type RepositoryMethod string
 // Method of Repository
 const (
 	RepositoryMethodREAD   RepositoryMethod = "READ"
-	RepositoryMethodINSERT RepositoryMethod = "INSERT"
+	RepositoryMethodInsert RepositoryMethod = "INSERT"
 	RepositoryMethodUPDATE RepositoryMethod = "UPDATE"
 	RepositoryMethodDELETE RepositoryMethod = "DELETE"
 	RepositoryMethodLIST   RepositoryMethod = "LIST"

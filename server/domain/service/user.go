@@ -2,13 +2,17 @@ package service
 
 import (
 	"context"
+	"time"
 
+	"github.com/hideUW/nuxt-go-chat-app/server/domain/model"
 	"github.com/hideUW/nuxt-go-chat-app/server/domain/repository"
+	"github.com/hideUW/nuxt-go-chat-app/server/util"
 	"github.com/pkg/errors"
 )
 
 // UserService is interface of domain service of user.
 type UserService interface {
+	NewUser(name, password string) (*model.User, error)
 	IsAlreadyExistID(ctx context.Context, id uint32) (bool, error)
 	IsAlreadyExistName(ctx context.Context, name string) (bool, error)
 }
@@ -27,6 +31,21 @@ func NewUserService(m repository.DBManager, repo repository.UserRepository) User
 		m:    m,
 		repo: repo,
 	}
+}
+
+// NewUser generates and reruns User.
+func (s *userService) NewUser(name, password string) (*model.User, error) {
+	hashed, err := util.HashPassword(password)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		Name:      name,
+		Password:  hashed,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}, nil
 }
 
 func (s *userService) IsAlreadyExistID(ctx context.Context, id uint32) (bool, error) {

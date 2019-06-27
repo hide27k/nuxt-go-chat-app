@@ -13,11 +13,6 @@ import (
 	sqlmock "gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
-const (
-	sessionValidIDForTest   = "testValidSessionID12345678"
-	sessionInValidIDForTest = "testInvalidSessionID12345678"
-)
-
 func TestNewSessionRepository(t *testing.T) {
 	type args struct {
 		ctx context.Context
@@ -29,7 +24,7 @@ func TestNewSessionRepository(t *testing.T) {
 		want repository.SessionRepository
 	}{
 		{
-			name: "When it is given valid args, returns SessionRepository.",
+			name: "When given appropriate args, returns SessionRepository",
 			args: args{
 				ctx: context.Background(),
 			},
@@ -51,7 +46,6 @@ func Test_sessionRepository_ErrorMsg(t *testing.T) {
 	type fields struct {
 		ctx context.Context
 	}
-
 	type args struct {
 		method model.RepositoryMethod
 		err    error
@@ -64,17 +58,17 @@ func Test_sessionRepository_ErrorMsg(t *testing.T) {
 		wantErr *model.RepositoryError
 	}{
 		{
-			name: "When it is given valid args, returns appropriate error.",
+			name: "When given appropriate args, returns appropriate error",
 			fields: fields{
 				ctx: context.Background(),
 			},
 			args: args{
-				method: model.RepositoryMethodINSERT,
+				method: model.RepositoryMethodInsert,
 				err:    errors.New(model.ErrorMessageForTest),
 			},
 			wantErr: &model.RepositoryError{
 				BaseErr:                     errors.New(model.ErrorMessageForTest),
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameSessionForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameSessionForUser,
 			},
@@ -87,14 +81,14 @@ func Test_sessionRepository_ErrorMsg(t *testing.T) {
 				ctx: tt.fields.ctx,
 			}
 			if err := repo.ErrorMsg(tt.args.method, tt.args.err); errors.Cause(err).Error() != tt.wantErr.Error() {
-				t.Errorf("sessionRepository.ErrMsg() error = %#v, wantErr %#v", err, tt.wantErr)
+				t.Errorf("sessionRepository.ErrorMsg() error = %#v, wantErr %#v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
 func Test_sessionRepository_GetSessionByID(t *testing.T) {
-	// Set sqlmock
+	// set sqlmock
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Error(err)
@@ -108,7 +102,6 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 	type fields struct {
 		ctx context.Context
 	}
-
 	type args struct {
 		m  repository.SQLManager
 		id string
@@ -122,7 +115,7 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 		wantErr *model.NoSuchDataError
 	}{
 		{
-			name: "When a session specified by id exists, return a session.",
+			name: "When a session specified by id exists, returns a session",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -134,7 +127,6 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 				ID:        model.SessionValidIDForTest,
 				UserID:    model.UserValidIDForTest,
 				CreatedAt: testutil.TimeNow(),
-				UpdatedAt: testutil.TimeNow(),
 			},
 			wantErr: nil,
 		},
@@ -159,14 +151,14 @@ func Test_sessionRepository_GetSessionByID(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			q := "SELECT id, user_id, created_at, updated_at FROM sessions WHERE id=?"
+			q := "SELECT id, user_id, created_at FROM sessions WHERE id=?"
 			prep := mock.ExpectPrepare(q)
 
 			if tt.wantErr != nil {
 				prep.ExpectQuery().WillReturnError(tt.wantErr)
 			} else {
-				rows := sqlmock.NewRows([]string{"id", "user_id", "created_at", "updated_at"}).
-					AddRow(tt.want.ID, tt.want.UserID, tt.want.CreatedAt, tt.want.UpdatedAt)
+				rows := sqlmock.NewRows([]string{"id", "user_id", "created_at"}).
+					AddRow(tt.want.ID, tt.want.UserID, tt.want.CreatedAt)
 				prep.ExpectQuery().WithArgs(tt.want.ID).WillReturnRows(rows)
 			}
 
@@ -218,7 +210,7 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 		wantErr     *model.RepositoryError
 	}{
 		{
-			name: "When a session which has ID, User_ID, CreatedAt, UpdatedAt is given, returns ID",
+			name: "When a session which has ID, User_ID, CreatedAt is given, returns ID",
 			fields: fields{
 				ctx: context.Background(),
 			},
@@ -228,7 +220,6 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 					ID:        model.SessionValidIDForTest,
 					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
-					UpdatedAt: testutil.TimeNow(),
 				},
 			},
 			rowAffected: 1,
@@ -245,12 +236,11 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 					ID:        model.SessionInValidIDForTest,
 					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
-					UpdatedAt: testutil.TimeNow(),
 				},
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameSessionForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameSessionForUser,
 			},
@@ -266,12 +256,11 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 					ID:        model.SessionInValidIDForTest,
 					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
-					UpdatedAt: testutil.TimeNow(),
 				},
 			},
 			rowAffected: 2,
 			wantErr: &model.RepositoryError{
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameSessionForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameSessionForUser,
 			},
@@ -287,13 +276,12 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 					ID:        model.SessionInValidIDForTest,
 					UserID:    model.UserValidIDForTest,
 					CreatedAt: testutil.TimeNow(),
-					UpdatedAt: testutil.TimeNow(),
 				},
 				err: errors.New(model.ErrorMessageForTest),
 			},
 			rowAffected: 0,
 			wantErr: &model.RepositoryError{
-				RepositoryMethod:            model.RepositoryMethodINSERT,
+				RepositoryMethod:            model.RepositoryMethodInsert,
 				DomainModelNameForDeveloper: model.DomainModelNameSessionForDeveloper,
 				DomainModelNameForUser:      model.DomainModelNameSessionForUser,
 			},
@@ -305,9 +293,9 @@ func Test_sessionRepository_InsertSession(t *testing.T) {
 			prep := mock.ExpectPrepare(query)
 
 			if tt.args.err != nil {
-				prep.ExpectExec().WithArgs(tt.args.session.ID, tt.args.session.UserID, tt.args.session.CreatedAt, tt.args.session.UpdatedAt).WillReturnError(tt.args.err)
+				prep.ExpectExec().WithArgs(tt.args.session.ID, tt.args.session.UserID, tt.args.session.CreatedAt).WillReturnError(tt.args.err)
 			} else {
-				prep.ExpectExec().WithArgs(tt.args.session.ID, tt.args.session.UserID, tt.args.session.CreatedAt, tt.args.session.UpdatedAt).WillReturnResult(sqlmock.NewResult(1, tt.rowAffected))
+				prep.ExpectExec().WithArgs(tt.args.session.ID, tt.args.session.UserID, tt.args.session.CreatedAt).WillReturnResult(sqlmock.NewResult(1, tt.rowAffected))
 			}
 
 			repo := &sessionRepository{
